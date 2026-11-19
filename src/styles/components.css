@@ -93,6 +93,19 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.hero-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background-color: #e0e7ff;
+  color: #3730a3;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .hero-title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -105,6 +118,128 @@
   color: var(--color-text-muted);
   max-width: 600px;
   margin: 0 auto;
+}
+
+/* Catalog Toolbar & Search */
+.catalog-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.catalog-toolbar .section-header {
+  margin-bottom: 0;
+}
+
+.product-count {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.search-bar-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 2.25rem 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  background: var(--color-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Skeleton Loading State */
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-pulse {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s infinite;
+}
+
+@keyframes skeletonPulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-image {
+  width: 100%;
+  padding-top: 100%;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-line-title {
+  width: 75%;
+}
+
+.skeleton-line-price {
+  width: 40%;
+  margin-bottom: 1.25rem;
+}
+
+.skeleton-button {
+  height: 38px;
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+/* Error Box */
+.catalog-error-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.error-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-danger);
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: #7f1d1d;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Sections & Page Layout */

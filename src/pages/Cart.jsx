@@ -5,6 +5,7 @@ import CartItem from '../components/CartItem';
  * Displays line items in the cart, subtotal calculation, and checkout button.
  */
 export default function Cart({ items = [], onUpdateQuantity, onRemove, onProceedToCheckout, onContinueShopping }) {
+  const currency = items[0]?.currency || 'CAD';
   const subtotal = items.reduce(
     (sum, item) => sum + parseFloat(item.price || 0) * item.quantity,
     0
@@ -38,7 +39,7 @@ export default function Cart({ items = [], onUpdateQuantity, onRemove, onProceed
             <h3>Order Summary</h3>
             <div className="cart-summary-row">
               <span>Subtotal</span>
-              <span>USD {subtotal.toFixed(2)}</span>
+              <span>{currency} {subtotal.toFixed(2)}</span>
             </div>
             <p className="cart-summary-note">Taxes and shipping calculated at checkout.</p>
             <button
