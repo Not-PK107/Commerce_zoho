@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchProducts } from '../services/shopify';
+import { fetchProducts, apiCapabilities } from '../services/zohoCommerce';
 
 /**
  * Custom Hook: useProducts
- * Encapsulates asynchronous product fetching, loading states, and error handling.
+ * Encapsulates asynchronous product fetching from Zoho Commerce API,
+ * loading states, diagnostic information, and error handling.
  * 
- * @param {number} count Number of products to load on initial mount
- * @returns {{ products: Array, loading: boolean, error: string|null, refetch: Function }}
+ * @returns {{ products: Array, loading: boolean, error: string|null, apiInfo: object, refetch: Function }}
  */
-export function useProducts(count = 20) {
+export function useProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,15 +18,15 @@ export function useProducts(count = 20) {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchProducts(count);
+      const data = await fetchProducts();
       setProducts(data);
     } catch (err) {
-      console.error('Failed to load products:', err);
-      setError(err.message || 'Unable to retrieve products. Please check connection.');
+      console.error('Failed to load Zoho Commerce products:', err);
+      setError(err.message || 'Unable to retrieve Zoho Commerce products.');
     } finally {
       setLoading(false);
     }
-  }, [count]);
+  }, []);
 
   // Initial fetch on mount with cancellation flag to avoid race conditions
   useEffect(() => {
@@ -34,15 +34,15 @@ export function useProducts(count = 20) {
 
     async function initFetch() {
       try {
-        const data = await fetchProducts(count);
+        const data = await fetchProducts();
         if (!isCancelled) {
           setProducts(data);
           setError(null);
         }
       } catch (err) {
         if (!isCancelled) {
-          console.error('Failed to load products:', err);
-          setError(err.message || 'Unable to retrieve products. Please check connection.');
+          console.error('Failed to load Zoho Commerce products:', err);
+          setError(err.message || 'Unable to retrieve Zoho Commerce products.');
         }
       } finally {
         if (!isCancelled) {
@@ -56,12 +56,13 @@ export function useProducts(count = 20) {
     return () => {
       isCancelled = true;
     };
-  }, [count]);
+  }, []);
 
   return {
     products,
     loading,
     error,
+    apiInfo: apiCapabilities,
     refetch,
   };
 }

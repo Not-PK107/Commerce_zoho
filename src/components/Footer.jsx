@@ -1,13 +1,18 @@
 /**
  * Footer Component
- * Application footer with branding, links, and API connection indicator.
+ * Application footer with branding, links, and Zoho Commerce status.
  */
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-container">
-        <p className="footer-brand">&copy; {new Date().getFullYear()} Headless Storefront. Powered by Shopify Storefront API.</p>
-        <p className="footer-meta">Backend Mode: {import.meta.env.VITE_SHOPIFY_API_URL?.includes('mock.shop') ? 'mock.shop (Development)' : 'Shopify Storefront API'}</p>
+        <div className="footer-left">
+          <p className="footer-brand">&copy; {new Date().getFullYear()} PK Storefront. All rights reserved.</p>
+          <p className="footer-sub">Premium electronics, flagship smartphones, and authentic accessories.</p>
+        </div>
+        <div className="footer-right">
+          <span className="footer-pill">🔒 256-Bit SSL Encrypted &amp; Secure Checkout</span>
+        </div>
       </div>
     </footer>
   );
