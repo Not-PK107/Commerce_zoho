@@ -80,8 +80,15 @@ export default function ProductDetails({
     currency = 'INR',
     images = [],
     featuredImage,
-    inStock = true,
   } = product;
+
+  // Consistent stock availability logic: product.in_stock === true && Number(product.stock_on_hand) > 0
+  const targetItem = activeVariant || product;
+  const inStock = targetItem.in_stock !== undefined && targetItem.stock_on_hand !== undefined
+    ? (targetItem.in_stock === true && Number(targetItem.stock_on_hand) > 0)
+    : (targetItem.inStock !== undefined
+        ? Boolean(targetItem.inStock)
+        : (product.in_stock === true && Number(product.stock_on_hand) > 0));
 
   const displayName = title || name || 'Product';
   const displayImages = images.length > 0 ? images : (featuredImage ? [featuredImage] : []);

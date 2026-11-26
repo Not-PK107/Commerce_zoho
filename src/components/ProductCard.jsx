@@ -40,8 +40,12 @@ export default function ProductCard({ product, onSelectProduct, onAddToCart }) {
     price,
     currency = 'INR',
     featuredImage,
-    inStock = true,
   } = product;
+
+  // Consistent stock availability logic: product.in_stock === true && Number(product.stock_on_hand) > 0
+  const inStock = product.in_stock !== undefined && product.stock_on_hand !== undefined
+    ? (product.in_stock === true && Number(product.stock_on_hand) > 0)
+    : Boolean(product.inStock);
 
   const displayName = title || name || 'Product';
   const displayPrice = formatPrice(price, currency);

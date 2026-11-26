@@ -109,9 +109,27 @@ export function normalizeZohoProduct(raw) {
 
   const featuredImage = images[0] || null;
 
-  // Stock calculations
-  const stockOnHand = raw.overall_stock ?? (raw.variants?.[0]?.stock_on_hand ?? raw.stock_on_hand);
-  const inStock = raw.status === 'active' && (stockOnHand === undefined || stockOnHand > 0);
+  // Stock calculations & normalization
+  // Safely extract raw stock quantity
+  const rawStock = raw.stock_on_hand ?? raw.overall_stock ?? raw.variants?.[0]?.stock_on_hand;
+  const parsedStockOnHand = Number(rawStock);
+  const stock_on_hand = !isNaN(parsedStockOnHand) && rawStock !== null && rawStock !== ''
+    ? parsedStockOnHand
+    : 0;
+
+  // Safely extract in_stock flag (boolean)
+  const rawInStock = raw.in_stock !== undefined
+    ? raw.in_stock
+    : (raw.is_in_stock !== undefined
+        ? raw.is_in_stock
+        : (raw.variants?.[0]?.in_stock !== undefined
+            ? raw.variants[0].in_stock
+            : (raw.status ? raw.status === 'active' : stock_on_hand > 0)));
+
+  const in_stock = rawInStock === true || rawInStock === 'true';
+
+  // Availability determination: product.in_stock === true && Number(product.stock_on_hand) > 0
+  const inStock = in_stock === true && Number(stock_on_hand) > 0;
   const stockAvailability = inStock ? 'in_stock' : 'out_of_stock';
 
   const brand = raw.brand || raw.brand_name || (
@@ -122,14 +140,33 @@ export function normalizeZohoProduct(raw) {
 
   const category = raw.category_name || raw.category || 'Electronics';
 
-  const variants = rawVariants.map((v) => ({
-    id: String(v.variant_id || v.item_id || v.id || variantId),
-    name: v.name || v.variant_name || v.title || name,
-    price: parseFloat(v.rate ?? v.selling_price ?? v.price ?? price),
-    sku: v.sku || '',
-    inStock: v.stock_on_hand === undefined || parseInt(v.stock_on_hand, 10) > 0,
-    stockOnHand: v.stock_on_hand !== undefined ? parseInt(v.stock_on_hand, 10) : undefined,
-  }));
+  const variants = rawVariants.map((v) => {
+    const rawVStock = v.stock_on_hand !== undefined ? v.stock_on_hand : rawStock;
+    const parsedVStock = Number(rawVStock);
+    const vStockOnHand = !isNaN(parsedVStock) && rawVStock !== null && rawVStock !== ''
+      ? parsedVStock
+      : 0;
+
+    const rawVInStock = v.in_stock !== undefined
+      ? v.in_stock
+      : (v.available !== undefined
+          ? v.available
+          : in_stock);
+
+    const vInStock = rawVInStock === true || rawVInStock === 'true';
+    const vInStockAvailable = vInStock === true && Number(vStockOnHand) > 0;
+
+    return {
+      id: String(v.variant_id || v.item_id || v.id || variantId),
+      name: v.name || v.variant_name || v.title || name,
+      price: parseFloat(v.rate ?? v.selling_price ?? v.price ?? price),
+      sku: v.sku || '',
+      inStock: vInStockAvailable,
+      in_stock: vInStock,
+      stockOnHand: vStockOnHand,
+      stock_on_hand: vStockOnHand,
+    };
+  });
 
   return {
     id,
@@ -143,10 +180,12 @@ export function normalizeZohoProduct(raw) {
     currency,
     description,
     shortDescription: description,
-    stockOnHand,
+    stockOnHand: stock_on_hand,
+    stock_on_hand,
     stockAvailability,
     inStock,
-    status: raw.status || 'active',
+    in_stock,
+    status: raw.status || (inStock ? 'active' : 'inactive'),
     isPublished: raw.show_in_storefront !== false && raw.is_published !== false,
     featuredImage,
     images: images.length > 0 ? images : (featuredImage ? [featuredImage] : []),
@@ -157,7 +196,9 @@ export function normalizeZohoProduct(raw) {
         price,
         sku: raw.sku || '',
         inStock,
-        stockOnHand,
+        in_stock,
+        stockOnHand: stock_on_hand,
+        stock_on_hand,
       },
     ],
   };
