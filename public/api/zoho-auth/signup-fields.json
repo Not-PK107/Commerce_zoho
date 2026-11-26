@@ -1,0 +1,12 @@
+{
+  "status_code": "0",
+  "status_message": "success",
+  "api_kind": "kind#signup_fields",
+  "payload": {
+    "signup": true,
+    "name": true,
+    "phone": true,
+    "receive_promotional_emails": true,
+    "confirm_password": true
+  }
+}

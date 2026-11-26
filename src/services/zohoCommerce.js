@@ -247,12 +247,32 @@ export async function fetchProducts() {
 
       if (response.ok) {
         const json = await safeJsonParse(response, 'Zoho Products');
-        const rawList = Array.isArray(json.products)
+        let rawList = Array.isArray(json.products)
           ? json.products
           : (Array.isArray(json.data) ? json.data : (Array.isArray(json) ? json : []));
 
-        console.log(`[Zoho Commerce] Successfully retrieved ${rawList.length} real products from Zoho store.`);
-        return rawList.map(normalizeZohoProduct);
+        // Resilient fallback to .json if static hosting serves SPA index.html for extensionless path
+        if (rawList.length === 0) {
+          try {
+            const fallbackRes = await fetch('/api/zoho-products.json', {
+              method: 'GET',
+              headers: { 'Accept': 'application/json' },
+            });
+            if (fallbackRes.ok) {
+              const fallbackJson = await safeJsonParse(fallbackRes, 'Zoho Products JSON Fallback');
+              rawList = Array.isArray(fallbackJson.products)
+                ? fallbackJson.products
+                : (Array.isArray(fallbackJson.data) ? fallbackJson.data : (Array.isArray(fallbackJson) ? fallbackJson : []));
+            }
+          } catch {
+            // ignore
+          }
+        }
+
+        if (rawList.length > 0) {
+          console.log(`[Zoho Commerce] Successfully retrieved ${rawList.length} real products from Zoho store.`);
+          return rawList.map(normalizeZohoProduct);
+        }
       }
     } catch (err) {
       console.error('[Zoho Commerce Product Retrieval Failed]:', err.message);

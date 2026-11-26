@@ -467,6 +467,69 @@ export default function zohoConfig(explicitMode = 'development') {
 
   return {
     name: 'zoho-commerce-api-middleware',
+    async buildStart() {
+      // In production build: pre-generate real product catalog JSON
+      // from Zoho Commerce into public/api/zoho-products and public/api/zoho-products.json
+      // so Vite automatically copies them into dist/api/zoho-products and dist/api/zoho-products.json!
+      try {
+        console.log('[Zoho Production Sync] Syncing real Zoho Commerce products for production deployment...');
+        const envCheck = loadEnv(mode, process.cwd(), '');
+        let tokenToUse = currentAccessToken || (envCheck.ZOHO_ADMIN_ACCESS_TOKEN || envCheck.VITE_ZOHO_ACCESS_TOKEN || '').trim();
+        if (tokenExpiresAt && Date.now() >= tokenExpiresAt) {
+          const refreshed = await refreshAccessToken();
+          if (refreshed) tokenToUse = refreshed;
+        }
+
+        let productsPayload = null;
+
+        // Strategy 1: Admin API with OAuth Token
+        if (tokenToUse) {
+          try {
+            const zohoRes = await fetch('https://commerce.zoho.in/store/api/v1/products', {
+              method: 'GET',
+              headers: {
+                Authorization: `Zoho-oauthtoken ${tokenToUse}`,
+                'X-com-zoho-store-organizationid': String(orgId),
+                'Content-Type': 'application/json',
+              },
+            });
+            const { data, isJson } = await safeParseZohoResponse(zohoRes, 'Zoho Products Admin API');
+            if (isJson && data?.code === 0 && Array.isArray(data.products) && data.products.length > 0) {
+              productsPayload = { code: 0, message: 'success', source: 'admin-api', products: data.products };
+            }
+          } catch (e) {
+            console.warn('[Zoho Production Sync] Admin API query warning:', e.message);
+          }
+        }
+
+        // Strategy 2: Live HTML scraping fallback
+        if (!productsPayload || !productsPayload.products || productsPayload.products.length === 0) {
+          try {
+            const scraped = await fetchLiveZohoStoreProducts(storefrontDomain, orgId);
+            if (Array.isArray(scraped) && scraped.length > 0) {
+              productsPayload = { code: 0, message: 'success', source: 'live-store', products: scraped };
+            }
+          } catch (e) {
+            console.warn('[Zoho Production Sync] Live store scraper warning:', e.message);
+          }
+        }
+
+        if (productsPayload && Array.isArray(productsPayload.products) && productsPayload.products.length > 0) {
+          const fs = await import('node:fs');
+          const path = await import('node:path');
+          const apiDir = path.resolve(process.cwd(), 'public/api');
+          if (!fs.existsSync(apiDir)) {
+            fs.mkdirSync(apiDir, { recursive: true });
+          }
+          const jsonStr = JSON.stringify(productsPayload, null, 2);
+          fs.writeFileSync(path.join(apiDir, 'zoho-products'), jsonStr, 'utf8');
+          fs.writeFileSync(path.join(apiDir, 'zoho-products.json'), jsonStr, 'utf8');
+          console.log(`[Zoho Production Sync] Successfully pre-rendered ${productsPayload.products.length} products to public/api/zoho-products.`);
+        }
+      } catch (err) {
+        console.warn('[Zoho Production Sync] Non-blocking warning:', err.message);
+      }
+    },
     config(userConfig, viteEnv) {
       if (viteEnv?.mode) {
         mode = viteEnv.mode;

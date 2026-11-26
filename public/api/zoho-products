@@ -1,0 +1,118 @@
+{
+  "code": 0,
+  "message": "success",
+  "source": "live-store",
+  "products": [
+    {
+      "product_id": "4162352000000034377",
+      "variant_id": "4162352000000034378",
+      "item_id": "4162352000000034378",
+      "name": "Iphone 16 Pro",
+      "product_name": "Iphone 16 Pro",
+      "title": "Iphone 16 Pro",
+      "brand": "Apple",
+      "category_name": "Electronics",
+      "url_slug": "iphone-16-pro",
+      "rate": 180000,
+      "selling_price": 180000,
+      "price": 180000,
+      "currency_code": "INR",
+      "in_stock": true,
+      "stock_on_hand": 10,
+      "description": "Powerful smartphone featuring the A18 chip, 48MP Fusion camera, 6.1-inch Super Retina XDR display, and Apple Intelligence support.",
+      "product_description": "Powerful smartphone featuring the A18 chip, 48MP Fusion camera, 6.1-inch Super Retina XDR display, and Apple Intelligence support.",
+      "images": [
+        {
+          "url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034377-igor-omilaev-lDWTfYhZ85w-unsplash.jpg"
+        }
+      ],
+      "image_url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034377-igor-omilaev-lDWTfYhZ85w-unsplash.jpg",
+      "featured_image": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034377-igor-omilaev-lDWTfYhZ85w-unsplash.jpg",
+      "variants": [
+        {
+          "variant_id": "4162352000000034378",
+          "item_id": "4162352000000034378",
+          "name": "Iphone 16 Pro",
+          "rate": 180000,
+          "selling_price": 180000,
+          "in_stock": true,
+          "stock_on_hand": 10
+        }
+      ]
+    },
+    {
+      "product_id": "4162352000000052003",
+      "variant_id": "4162352000000052004",
+      "item_id": "4162352000000052004",
+      "name": "MacBook M1 Pro",
+      "product_name": "MacBook M1 Pro",
+      "title": "MacBook M1 Pro",
+      "brand": "Apple",
+      "category_name": "Electronics",
+      "url_slug": "macbook-m1-pro",
+      "rate": 500000,
+      "selling_price": 500000,
+      "price": 500000,
+      "currency_code": "INR",
+      "in_stock": true,
+      "stock_on_hand": 10,
+      "description": "",
+      "product_description": "",
+      "images": [
+        {
+          "url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000052003-dlxmedia-hu-UkpTGYox6RM-unsplash.jpg"
+        }
+      ],
+      "image_url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000052003-dlxmedia-hu-UkpTGYox6RM-unsplash.jpg",
+      "featured_image": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000052003-dlxmedia-hu-UkpTGYox6RM-unsplash.jpg",
+      "variants": [
+        {
+          "variant_id": "4162352000000052004",
+          "item_id": "4162352000000052004",
+          "name": "MacBook M1 Pro",
+          "rate": 500000,
+          "selling_price": 500000,
+          "in_stock": true,
+          "stock_on_hand": 10
+        }
+      ]
+    },
+    {
+      "product_id": "4162352000000034350",
+      "variant_id": "4162352000000034351",
+      "item_id": "4162352000000034351",
+      "name": "Samsung S24 Ultra",
+      "product_name": "Samsung S24 Ultra",
+      "title": "Samsung S24 Ultra",
+      "brand": "Samsung",
+      "category_name": "Electronics",
+      "url_slug": "samsung-s24-ultra",
+      "rate": 80000,
+      "selling_price": 80000,
+      "price": 80000,
+      "currency_code": "INR",
+      "in_stock": true,
+      "stock_on_hand": 10,
+      "description": "Premium flagship smartphone featuring a 6.8-inch Dynamic AMOLED display, powerful Snapdragon processor, advanced 200MP camera system, and built-in S Pen for productivity.",
+      "product_description": "Premium flagship smartphone featuring a 6.8-inch Dynamic AMOLED display, powerful Snapdragon processor, advanced 200MP camera system, and built-in S Pen for productivity.",
+      "images": [
+        {
+          "url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034350-evgeny-opanasenko-H8-mb0OBx6s-unsplash.jpg"
+        }
+      ],
+      "image_url": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034350-evgeny-opanasenko-H8-mb0OBx6s-unsplash.jpg",
+      "featured_image": "https://lyra.zohoecommerce.com/60096917552/product-images/4162352000000034350-evgeny-opanasenko-H8-mb0OBx6s-unsplash.jpg",
+      "variants": [
+        {
+          "variant_id": "4162352000000034351",
+          "item_id": "4162352000000034351",
+          "name": "Samsung S24 Ultra",
+          "rate": 80000,
+          "selling_price": 80000,
+          "in_stock": true,
+          "stock_on_hand": 10
+        }
+      ]
+    }
+  ]
+}
